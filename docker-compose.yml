@@ -1,0 +1,85 @@
+version: '3.7'
+services:
+  kamailio:
+    container_name: kamailio
+    build:
+      context: ./build_kam
+      dockerfile: ./Dockerfile
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rtpengine:
+        condition: service_healthy
+    environment:
+      - DOMINIO_BASE=kamailio.local
+      - KAMAILIO_IP_INTERNO=172.25.0.20 ## container ip
+      - KAMAILIO_IP_EXTERNO=192.168.50.22 ## local ip
+      - KAMAILIO_IP_DB=172.25.0.21 ## postgres ip
+      - RTPENGINE_IP=192.168.50.22 ## rtpengine ip
+      - POSTGRES_USER=postgres ## db root
+      - POSTGRES_PASSWORD=58e1bab9f6613cce680ed55245a91d30 ## db root pass
+      - DB_NAME=kamailio
+      - SELFSIGNED=true
+    #entrypoint: "sleep 1000000"
+    network_mode: host
+    logging:
+      options:
+        max-size: 100M
+
+  postgres:
+    container_name: postgres
+    image: postgres:13.12-alpine
+    restart: always
+    healthcheck:
+      test: pg_isready -d postgres -h localhost -p 5432 -U postgres
+    expose:
+      - 5432
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres 
+      - POSTGRES_USER=postgres ## db root
+      - POSTGRES_PASSWORD=58e1bab9f6613cce680ed55245a91d30 ## db root pass
+    networks:
+      net:
+        ipv4_address: 172.25.0.21
+    logging:
+      options:
+        max-size: 100M
+
+  rtpengine:
+    container_name: rtpengine
+    build:
+      context: ./build_rtp
+      dockerfile: ./Dockerfile
+    restart: always
+    privileged: true
+    environment:
+      - IPINTERNO=192.168.50.22 ## internal ip
+      - IPEXTERNO=189.189.189.189 ## external ip
+      - PORT_MIN=10000
+      - PORT_MAX=20000
+    #entrypoint: sleep 1000000
+    network_mode: host
+    logging:
+      options:
+        max-size: 100M
+
+  asterisk:
+    container_name: asterisk
+    build:
+      context: ./build_ast
+      dockerfile: ./Dockerfile
+    restart: always
+    volumes:
+      - ./conf:/etc/asterisk
+      - ./static-http:/var/lib/asterisk/static-http
+    network_mode: host          
+    logging:
+      options:
+        max-size: 100M
+
+networks:
+  net:
+    external: true
