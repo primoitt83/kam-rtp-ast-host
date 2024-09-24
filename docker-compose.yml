@@ -12,11 +12,11 @@ services:
       rtpengine:
         condition: service_healthy
     environment:
-      - DOMINIO_BASE=kamailio.local
-      - KAMAILIO_IP_INTERNO=172.25.0.20 ## container ip
-      - KAMAILIO_IP_EXTERNO=192.168.50.22 ## local ip
+      - DOMINIO_BASE=meuvoip.com.br
+      - KAMAILIO_IP_INTERNO=192.168.5.12 ## container ip
+      - KAMAILIO_IP_EXTERNO=177.177.177.177 ## local ip
       - KAMAILIO_IP_DB=172.25.0.21 ## postgres ip
-      - RTPENGINE_IP=192.168.50.22 ## rtpengine ip
+      - RTPENGINE_IP=192.168.5.12 ## rtpengine ip
       - POSTGRES_USER=postgres ## db root
       - POSTGRES_PASSWORD=58e1bab9f6613cce680ed55245a91d30 ## db root pass
       - DB_NAME=kamailio
@@ -55,9 +55,11 @@ services:
       dockerfile: ./Dockerfile
     restart: always
     privileged: true
+    healthcheck:
+      test: curl --fail http://192.168.5.12:2225/ping || exit 1 ## internal ip + ng-port
     environment:
-      - IPINTERNO=192.168.50.22 ## internal ip
-      - IPEXTERNO=189.189.189.189 ## external ip
+      - IPINTERNO=192.168.5.12 ## internal ip
+      - IPEXTERNO=177.177.177.177 ## external ip
       - PORT_MIN=10000
       - PORT_MAX=20000
     #entrypoint: sleep 1000000
@@ -72,8 +74,13 @@ services:
       context: ./build_ast
       dockerfile: ./Dockerfile
     restart: always
+    environment:
+      - DOMINIO_BASE=meuvoip.com.br
+      - IPINTERNO=192.168.5.12 ## internal ip
+      - PORT_MIN=18000
+      - PORT_MAX=18100
     volumes:
-      - ./conf:/etc/asterisk
+      #- ./conf:/etc/asterisk
       - ./static-http:/var/lib/asterisk/static-http
     network_mode: host          
     logging:

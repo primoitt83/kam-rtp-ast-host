@@ -26,12 +26,12 @@ fi
 
 ## check selfsigned
 if [ "$SELFSIGNED" == true ]; then
-    if [ ! -d "/etc/certs/$DOMINIO_BASE/key.pem" ]; then
+    if [ ! -f "/etc/certs/$DOMINIO_BASE/key.pem" ]; then
         ## does not exists, lets create
         mkdir -p /etc/certs/$DOMINIO_BASE
         openssl req -x509 -newkey rsa:4096 -keyout /etc/certs/$DOMINIO_BASE/key.pem -out \
             /etc/certs/$DOMINIO_BASE/fullchain.pem -days 3650 -subj \
-            "/C=BR/ST=Sao Paulo=Marilia/O=FAL/OU=FAL/CN=*.kamailio.local" -nodes -sha256
+            "/C=BR/ST=Sao Paulo=Marilia/O=FAL/OU=FAL/CN=*.$DOMINIO_BASE" -nodes -sha256
     fi            
 fi
 

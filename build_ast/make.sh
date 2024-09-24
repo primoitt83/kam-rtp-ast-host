@@ -25,9 +25,8 @@ apt-get install -y \
   unixodbc-dev \
   uuid-dev \
   wget
- 
-#wget --no-check-certificate https://discorl.serpro.gov.br/index.php/s/TkDd6my6nXoMNi7/download/asterisk-16-current.tar.gzs
-wget -c "https://candidomendes-my.sharepoint.com/:u:/g/personal/564291738ce_aluno_ucam_edu_br/EZP18AD0WDJMmafGPbdGcecBXquO6Z65ygIGbODDSNIMpQ?e=uPYbGH&download=1" -O asterisk-16-current.tar.gz
+
+wget -c "https://candidomendes-my.sharepoint.com/:u:/g/personal/564291738ce_aluno_ucam_edu_br/EXPmH9XwfytJq2E6AGkE0D4BZPW1dAalTyt_wPg6_sJR8Q?e=QTqbpb&download=1" -O asterisk-18-current.tar.gz 
 tar -xvf asterisk-*
 # Comente daqui pra baixo para alterar coisas no asterisk
 cd asterisk*/

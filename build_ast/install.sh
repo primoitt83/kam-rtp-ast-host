@@ -57,10 +57,7 @@ apt-get install -y \
   libportaudio2 \
   wget
   
-
 ## sngrep para websockets e odbc para conectar com mariadb
-#apt install -y sngrep telnet net-tools vim curl libresample1-dev libical-dev libspeexdsp-dev libgmime-2.6-dev unixodbc odbcinst mariadb-client odbc-mariadb mysql-client wget
-#curl -k https://discorl.serpro.gov.br/index.php/s/nGWbQsjst2Yw5BP/download/odbc-mariadb_3.1.9-1~bpo10+1_amd64.deb -o odbc-mariadb_3.1.9-1~bpo10+1_amd64.deb
 wget -c "https://candidomendes-my.sharepoint.com/:u:/g/personal/564291738ce_aluno_ucam_edu_br/Ea3KKie_eV1Pg25kV9DgvzsBNAWlekxWXi4Og1PRYOKyDw?e=DbFH9U&download=1" -O odbc-mariadb_3.1.9-1~bpo10+1_amd64.deb
 dpkg -i odbc-mariadb_3.1.9-1~bpo10+1_amd64.deb
 apt-get autoclean

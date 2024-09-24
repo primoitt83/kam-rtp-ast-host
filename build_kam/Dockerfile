@@ -30,12 +30,12 @@ COPY ${PWD}/kss /usr/bin/kss
 COPY ${PWD}/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-## fix kss 
+## fix scripts
 RUN \
-    dos2unix /usr/bin/kss && \
+    dos2unix /usr/bin/kss /etc/kamailio/kamctlrc && \
     chmod +x /usr/bin/kss
 
-EXPOSE 5060 5060/udp 8080 5061 5090/udp 8443
+EXPOSE 5060 5060/udp 8080 5061 5090/udp 9443
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["kamailio -E -DD -P /run/kamailio/kamailio.pid -f /etc/kamailio/kamailio.cfg"]

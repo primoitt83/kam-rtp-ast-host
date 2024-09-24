@@ -7,9 +7,8 @@ COPY ${PWD}/entrypoint.sh /entrypoint.sh
 RUN chmod +x /make.sh && /make.sh
  
 FROM debian:buster-slim as final
- 
+
 COPY ${PWD}/install.sh /install.sh
- 
 RUN chmod +x /install.sh && /install.sh
 
 COPY --from=builder --chown=asterisk:asterisk /usr/lib/libasterisk* /usr/lib/
@@ -20,8 +19,11 @@ COPY --from=builder --chown=asterisk:asterisk /usr/sbin/asterisk /usr/sbin/aster
 COPY --from=builder --chown=asterisk:asterisk /etc/asterisk/ /etc/asterisk/
 COPY --from=builder --chown=asterisk:asterisk /etc/init.d/asterisk /etc/init.d/
 COPY --from=builder --chown=asterisk:asterisk /var/lib/asterisk/ /var/lib/asterisk/
- 
 COPY --from=builder /entrypoint.sh /entrypoint.sh
+
+COPY ${PWD}/extensions.conf /etc/asterisk
+COPY ${PWD}/pjsip.conf /etc/asterisk
+COPY ${PWD}/rtp.conf /etc/asterisk
 
 RUN mkdir /var/run/asterisk
  
